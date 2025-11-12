@@ -1,45 +1,28 @@
-// Smooth transition when switching pages
+// Smooth page transitions
 document.querySelectorAll('a[href]').forEach(link => {
-  if (link.hostname === window.location.hostname) {
+  if (link.hostname === window.location.hostname && !link.hash) {
     link.addEventListener('click', e => {
-      const href = link.getAttribute('href');
-      if (!href.startsWith('#')) {
-        e.preventDefault();
-        document.body.style.opacity = 0;
-        setTimeout(() => {
-          window.location.href = href;
-        }, 400);
-      }
+      e.preventDefault();
+      document.body.style.opacity = 0;
+      setTimeout(() => (window.location.href = link.href), 400);
     });
   }
 });
 
-// Smooth scroll for internal links (#projects, #contact)
+// Smooth scroll for internal anchors (#section)
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
+  anchor.addEventListener('click', e => {
     e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
+    const target = document.querySelector(anchor.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
   });
 });
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
-    e.preventDefault();
-    document.querySelector(this.getAttribute('href')).scrollIntoView({
-      behavior: 'smooth'
-    });
-  });
-});
-// Scroll to top button logic
+
+// Scroll-to-top button
 const scrollBtn = document.getElementById("scrollTopBtn");
-
 window.addEventListener("scroll", () => {
-  if (window.scrollY > 300) scrollBtn.style.display = "block";
-  else scrollBtn.style.display = "none";
+  scrollBtn.style.display = window.scrollY > 300 ? "block" : "none";
 });
-
 scrollBtn.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
